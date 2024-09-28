@@ -5,4 +5,9 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   base: '/Self-Service-App/',
   plugins: [react()],
+  build: {
+    rollupOptions: {
+      external: ['framer-motion'], // Add framer-motion to external dependencies
+    }
+  }
 });
