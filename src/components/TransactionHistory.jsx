@@ -15,6 +15,8 @@ import {
 } from '@mui/material';
 import { Print, Download } from '@mui/icons-material';
 import * as XLSX from 'xlsx'; // Importing xlsx library
+import jsPDF from 'jspdf'; // Importing jsPDF library
+import 'jspdf-autotable'; // Importing the autoTable plugin for jsPDF
 
 const transactions = [
   { date: '2024-09-12', time: '10:30 AM', description: 'Consultation Fee', amount: '-₦20,000.00', balance: '₦12,530,890.00' },
@@ -66,21 +68,48 @@ const TransactionHistory = () => {
     printWindow.print();
   };
 
-  const handleDownload = () => {
+  const handleDownloadExcel = () => {
     const data = transactions.map(({ date, description, amount, balance }) => ({
       Date: date,
       Description: description,
-      Amount: amount,
-      Balance: balance,
+      Amount: amount.replace(/[₦#]/g, '').trim(),
+      Balance: balance.replace(/[₦#]/g, '').trim(),
     }));
-
-    // Add username and avatar as metadata in the workbook
+  
     const ws = XLSX.utils.json_to_sheet(data);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Transactions');
-
-    // Set the filename to include the username
+  
     XLSX.writeFile(wb, `${username}_transaction_history.xlsx`);
+  };
+  
+
+  const handleDownloadPDF = () => {
+    const doc = new jsPDF();
+    
+    doc.setFontSize(20);
+    doc.text(`Transaction History for ${username}`, 14, 22);
+    doc.setFontSize(10);
+    
+    // Define the table columns
+    const tableColumn = ["Date", "Description", "Amount", "Balance"];
+    const tableRows = [];
+
+    transactions.forEach(transaction => {
+      const transactionData = [
+        `${transaction.date} -- ${transaction.time}`,
+        transaction.description,
+        transaction.amount,
+        transaction.balance,
+      ];
+      tableRows.push(transactionData);
+    });
+
+    // Generate the table using autoTable
+    doc.autoTable(tableColumn, tableRows, { startY: 30 });
+    
+    // Save the PDF
+    doc.save(`${username}_transaction_history.pdf`);
   };
 
   return (
@@ -140,18 +169,26 @@ const TransactionHistory = () => {
             color="primary"
             startIcon={<Print />}
             onClick={handlePrint}
-            sx={{ mx: 1 }}
+            sx={{ mr: 2 }}
           >
             Print
           </Button>
           <Button
             variant="outlined"
-            color="primary"
+            color="success"
             startIcon={<Download />}
-            onClick={handleDownload}
-            sx={{ mx: 1 }}
+            onClick={handleDownloadExcel}
+            sx={{ mr: 2 }}
           >
             Download Excel
+          </Button>
+          <Button
+            variant="outlined"
+            color="error"
+            startIcon={<Download />}
+            onClick={handleDownloadPDF}
+          >
+            Download PDF
           </Button>
         </Grid>
       </Grid>
