@@ -14,6 +14,7 @@ import {
   Avatar,
 } from '@mui/material';
 import { Print, Download } from '@mui/icons-material';
+import * as XLSX from 'xlsx'; // Importing xlsx library
 
 const transactions = [
   { date: '2024-09-12', time: '10:30 AM', description: 'Consultation Fee', amount: '-₦20,000.00', balance: '₦12,530,890.00' },
@@ -28,14 +29,14 @@ const transactions = [
   { date: '2024-08-01', time: '05:00 PM', description: 'Medical Research Funding', amount: '+₦3,500,000.00', balance: '₦15,554,890.00' }
 ];
 
-const username = 'John Doe'; // Example username
-const userAvatar = 'https://via.placeholder.com/60'; // Example avatar URL
+const username = 'Mr Biyi'; // Example username
+const userAvatar = 'https://storage.needpix.com/rsynced_images/head-659651_1280.png'; // Example avatar URL
 
 const TransactionHistory = () => {
   const handlePrint = () => {
     const printContent = `
       <div style="text-align: center; margin-bottom: 20px;">
-        <img src="${userAvatar}" alt="User Avatar" style="border-radius: 50%; width: 80px; height: 80px;" />
+        <img src="${userAvatar}" alt="User Avatar" style="border-radius: 50%; width: 120px; height: 120px;" />
         <h2>${username}</h2>
       </div>
       <table style="width: 100%; border-collapse: collapse;">
@@ -66,30 +67,20 @@ const TransactionHistory = () => {
   };
 
   const handleDownload = () => {
-    const csvData = transactions.map(({ date, description, amount, balance }) => ({
+    const data = transactions.map(({ date, description, amount, balance }) => ({
       Date: date,
       Description: description,
       Amount: amount,
       Balance: balance,
     }));
 
-    const csvContent = 'data:text/csv;charset=utf-8,' + [
-      ['Username', username],
-      ['Avatar', userAvatar],
-      [''],
-      ['Date', 'Description', 'Amount', 'Balance'],
-      ...csvData.map(row => [row.Date, row.Description, row.Amount, row.Balance]),
-    ]
-      .map(e => e.join(','))
-      .join('\n');
+    // Add username and avatar as metadata in the workbook
+    const ws = XLSX.utils.json_to_sheet(data);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Transactions');
 
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement('a');
-    link.setAttribute('href', encodedUri);
-    link.setAttribute('download', 'transaction_history.csv');
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    // Set the filename to include the username
+    XLSX.writeFile(wb, `${username}_transaction_history.xlsx`);
   };
 
   return (
@@ -97,7 +88,7 @@ const TransactionHistory = () => {
       <Grid container spacing={2}>
         {/* User Info */}
         <Grid item xs={12} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mb: 2 }}>
-          <Avatar src={userAvatar} alt="User Avatar" sx={{ width: 56, height: 56 }} />
+          <Avatar src={userAvatar} alt="User Avatar" sx={{ width: 120, height: 120 }} />
           <Typography variant="h6" sx={{ mt: 1, mb: 1 }}>
             {username}
           </Typography>
@@ -160,7 +151,7 @@ const TransactionHistory = () => {
             onClick={handleDownload}
             sx={{ mx: 1 }}
           >
-            Download CSV
+            Download Excel
           </Button>
         </Grid>
       </Grid>

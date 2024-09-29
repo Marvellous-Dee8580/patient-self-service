@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Typography, Button, Container, Modal, TextField, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
+import { Box, Typography, Button, Container, Modal, TextField, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, CircularProgress } from '@mui/material';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import backgroundImage from '../assets/HEALTHCARE_ENVIRONMENT-RENDER_01-crop.jpeg';
@@ -9,6 +9,7 @@ const Landing = () => {
   const [open, setOpen] = useState(false); // For the deposit modal
   const [openConfirm, setOpenConfirm] = useState(false); // For confirmation dialog
   const [openSuccess, setOpenSuccess] = useState(false); // For success modal
+  const [openLoader, setOpenLoader] = useState(false); // For loader modal
   const [buttonText, setButtonText] = useState('Make Deposit'); // State for button text
 
   const [formValues, setFormValues] = useState({ amount: 0.0, description: '', pid: 0 });
@@ -40,6 +41,7 @@ const Landing = () => {
   const handleConfirmOpen = () => setOpenConfirm(true);
   const handleConfirmClose = () => setOpenConfirm(false);
   const handleSuccessClose = () => setOpenSuccess(false);
+  const handleLoaderClose = () => setOpenLoader(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -48,9 +50,15 @@ const Landing = () => {
 
   const handleFinalSubmit = () => {
     console.log('Deposit Submitted', formValues);
-    setOpenSuccess(true); // Show success modal
+    setOpenLoader(true); // Show loader modal
     handleConfirmClose();
     handleClose();
+
+    // Simulate a network request
+    setTimeout(() => {
+      setOpenLoader(false); // Close loader modal after some time
+      setOpenSuccess(true); // Show success modal
+    }, 2000); // Adjust the duration as needed
   };
 
   const handleMouseEnter = () => {
@@ -113,6 +121,27 @@ const Landing = () => {
         </Box>
       </Modal>
 
+      {/* Loader Modal */}
+      <Modal open={openLoader} onClose={handleLoaderClose}>
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            bgcolor: 'background.paper',
+            boxShadow: 24,
+            p: 4,
+            textAlign: 'center',
+          }}
+        >
+          <CircularProgress />
+          <Typography variant="h6" sx={{ mt: 2 }}>
+            Processing your deposit...
+          </Typography>
+        </Box>
+      </Modal>
+
       {/* Main Content */}
       <>
         {/* Header Section with Login and Signup Buttons */}
@@ -146,11 +175,14 @@ const Landing = () => {
             {/* Button to open the deposit modal */}
             <Button
               variant="contained"
-              color="primary"
-              size="large"
+              onClick={handleOpen}
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
-              onClick={handleOpen}
+              sx={{
+                backgroundColor: '#1976d2',
+                '&:hover': { backgroundColor: '#115293' },
+                transition: 'background-color 0.3s',
+              }}
             >
               {buttonText}
             </Button>
@@ -169,9 +201,11 @@ const Landing = () => {
               bgcolor: 'background.paper',
               boxShadow: 24,
               p: 4,
+              borderRadius: 2, // Rounded corners for the modal
+              border: '1px solid #1976d2', // Border color to match the theme
             }}
           >
-            <Typography id="modal-title" variant="h6" component="h2" mb={2}>
+            <Typography id="modal-title" variant="h6" component="h2" mb={2} sx={{ textAlign: 'center', fontWeight: 'bold' }}>
               Make a Deposit
             </Typography>
             <form onSubmit={handleSubmit}>
@@ -184,6 +218,7 @@ const Landing = () => {
                 type="number"
                 value={formValues.pid}
                 onChange={handleChange}
+                sx={{ bgcolor: '#f5f5f5', borderRadius: 1 }} // Light background for input
               />
               <TextField
                 name="amount"
@@ -196,6 +231,7 @@ const Landing = () => {
                 value={formValues.amount}
                 onChange={handleChange}
                 onBlur={handleBlur}
+                sx={{ bgcolor: '#f5f5f5', borderRadius: 1 }} // Light background for input
               />
               <TextField
                 name="description"
@@ -204,38 +240,36 @@ const Landing = () => {
                 margin="normal"
                 value={formValues.description}
                 onChange={handleChange}
+                sx={{ bgcolor: '#f5f5f5', borderRadius: 1 }} // Light background for input
               />
-              <Button type="submit" variant="contained" color="primary" fullWidth>
+              <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 2 }}>
                 Make Payment
               </Button>
             </form>
           </Box>
         </Modal>
 
-        {/* Confirmation dialog */}
-        <Dialog
-          open={openConfirm}
-          onClose={handleConfirmClose}
-          aria-labelledby="confirm-dialog-title"
-          aria-describedby="confirm-dialog-description"
-        >
-          <DialogTitle id="confirm-dialog-title">Confirm Deposit</DialogTitle>
+        {/* Confirmation Dialog */}
+        <Dialog open={openConfirm} onClose={handleConfirmClose}>
+          <DialogTitle sx={{ fontWeight: 'bold', textAlign: 'center' }}>Confirm Deposit</DialogTitle>
           <DialogContent>
-            <DialogContentText id="confirm-dialog-description">
-              Are you sure you want to proceed with payment?
+            <DialogContentText sx={{ mb: 2 }}>
+              Are you sure you want to deposit the following details?
             </DialogContentText>
-            <br />
-            <Typography variant="body1"><strong>PID:</strong> {formValues.pid}</Typography>
-            <Typography variant="body1"><strong>Amount:</strong> {formValues.amount}</Typography>
-            <Typography variant="body1"><strong>Description:</strong> {formValues.description}</Typography>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+              <Typography variant="body1" sx={{ fontWeight: 'bold' }}>Amount:</Typography>
+              <Typography variant="body2" sx={{ color: '#1976d2' }}>{formValues.amount} </Typography>
+              
+              <Typography variant="body1" sx={{ fontWeight: 'bold' }}>PID:</Typography>
+              <Typography variant="body2" sx={{ color: '#1976d2' }}>{formValues.pid}</Typography>
+              
+              <Typography variant="body1" sx={{ fontWeight: 'bold' }}>Description:</Typography>
+              <Typography variant="body2" sx={{ color: '#1976d2' }}>{formValues.description || 'No description provided'}</Typography>
+            </Box>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleConfirmClose} color="primary">
-              Cancel
-            </Button>
-            <Button onClick={handleFinalSubmit} color="primary">
-              Confirm
-            </Button>
+            <Button onClick={handleConfirmClose} color="primary">Cancel</Button>
+            <Button onClick={handleFinalSubmit} color="primary">Confirm</Button>
           </DialogActions>
         </Dialog>
       </>
