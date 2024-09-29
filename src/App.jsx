@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 import { Box, CssBaseline } from "@mui/material";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, useLocation } from "react-router-dom";
 import Dashboard from "./components/Dashboard";
 import Login from "./components/Login";
 import SignUp from "./components/SignUp";
@@ -12,12 +12,14 @@ import OutstandingBills from './components/OutstandingBills';
 import WalletTransfer from './components/WalletTransfer';
 import BillHistory from './components/BillHistory';
 import ForgotPassword from "./components/ForgotPassword";
+import LogoutButton from './components/LogoutButton';
 
 function App() {
   return (
     <Router>
       <CssBaseline />
       <Box>
+        <ConditionalLogoutButton />
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/login" element={<Login />} />
@@ -35,5 +37,18 @@ function App() {
     </Router>
   );
 }
+
+// Conditional rendering of LogoutButton based on the route
+const ConditionalLogoutButton = () => {
+  const location = useLocation();
+  const hideLogoutButton = [
+    '/',
+    '/login',
+    '/signup',
+    '/forgot-password',
+  ];
+
+  return !hideLogoutButton.includes(location.pathname) ? <LogoutButton /> : null;
+};
 
 export default App;
