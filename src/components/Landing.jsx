@@ -58,7 +58,7 @@ const Landing = () => {
     setTimeout(() => {
       setOpenLoader(false); // Close loader modal after some time
       setOpenSuccess(true); // Show success modal
-    }, 2000); // Adjust the duration as needed
+    }, 3000); // Adjust the duration as needed
   };
 
   const handleMouseEnter = () => {
