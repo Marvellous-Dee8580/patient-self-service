@@ -184,7 +184,6 @@ const Landing = () => {
               name="description"
               label="Description"
               fullWidth
-              required
               margin="normal"
               value={formValues.description}
               onChange={handleChange}
