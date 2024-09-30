@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
-import { Box, Typography, Button, Container, Modal, TextField, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, CircularProgress } from '@mui/material';
+import React, { useState, useRef } from 'react';
+import { Box, Typography, Button, Container, Modal, TextField, Dialog, DialogTitle,IconButton, DialogContent, DialogContentText, DialogActions, CircularProgress } from '@mui/material';
 import { motion } from 'framer-motion';
+import { Close as CloseIcon } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 import backgroundImage from '../assets/HEALTHCARE_ENVIRONMENT-RENDER_01-crop.jpeg';
 import successImage from '../assets/Success.png'; // Import your success image
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
 
 const Landing = () => {
   const [open, setOpen] = useState(false); // For the deposit modal
@@ -11,7 +14,8 @@ const Landing = () => {
   const [openSuccess, setOpenSuccess] = useState(false); // For success modal
   const [openLoader, setOpenLoader] = useState(false); // For loader modal
   const [buttonText, setButtonText] = useState('Make Deposit'); // State for button text
-
+  const receiptRef = useRef(); // Ref for printing the receipt
+  const [openReceipt, setOpenReceipt] = useState(false); // For receipt modal
   const [formValues, setFormValues] = useState({ amount: 0.0, description: '', pid: 0 });
 
   const handleChange = (e) => {
@@ -42,6 +46,8 @@ const Landing = () => {
   const handleConfirmClose = () => setOpenConfirm(false);
   const handleSuccessClose = () => setOpenSuccess(false);
   const handleLoaderClose = () => setOpenLoader(false);
+  const handleReceiptOpen = () => setOpenReceipt(true); // Open the receipt modal
+  const handleReceiptClose = () => setOpenReceipt(false); // Close the receipt modal
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -67,6 +73,55 @@ const Landing = () => {
 
   const handleMouseLeave = () => {
     setButtonText('Make Deposit');
+  };
+  // const handlePrintReceipt = () => {
+  //   window.print(); // Trigger browser print dialog
+  // };
+
+  const handlePrintReceipt = () => {
+    const printWindow = window.open('', '', 'width=1000,height=800');
+    printWindow.document.write(`
+        <html>
+            <head>
+                <title>Receipt</title>
+                <style>
+                    body {
+                        font-family: Arial, sans-serif;
+                        padding: 20px;
+                        text-align: center;
+                    }
+                    h1 {
+                        color: #1976d2;
+                    }
+                    p {
+                        font-size: 18px;
+                    }
+                </style>
+            </head>
+            <body>
+                <h1>Payment Receipt</h1>
+                <p><strong>PID:</strong> ${formValues.pid}</p>
+                <p><strong>Amount:</strong> ${formValues.amount}</p>
+                <p><strong>Description:</strong> ${formValues.description || 'No description provided'}</p>
+            </body>
+        </html>
+    `);
+    printWindow.document.close(); // Close the document to complete writing
+    printWindow.print(); // Trigger the print dialog
+};
+
+  const handleDownloadReceipt = () => {
+    const doc = new jsPDF();
+    doc.text("Payment Receipt", 20, 10);
+    doc.autoTable({
+      head: [['Field', 'Value']],
+      body: [
+        ['Amount', formValues.amount],
+        ['PID', formValues.pid],
+        ['Description', formValues.description || 'No description provided'],
+      ],
+    });
+    doc.save('receipt.pdf'); // Save as PDF
   };
 
   return (
@@ -115,9 +170,58 @@ const Landing = () => {
           <Typography id="success-modal-description" variant="body1">
             Thank you for your payment. Your transaction has been completed.
           </Typography>
-          <Button variant="contained" color="primary" onClick={handleSuccessClose} sx={{ mt: 2 }}>
-            Go Back
+          <Button variant="contained" color="primary" onClick={handleReceiptOpen} sx={{ mt: 2 }}>
+            View Receipt
           </Button>
+        </Box>
+      </Modal>
+
+      {/* Receipt Modal */}
+      <Modal open={openReceipt} onClose={handleReceiptClose} aria-labelledby="receipt-modal-title" aria-describedby="receipt-modal-description">
+        <Box
+          sx={{
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: 400,
+            bgcolor: 'background.paper',
+            boxShadow: 24,
+            p: 4,
+            borderRadius: 2,
+            textAlign: 'center',
+            position: 'relative', // Make the box relative to contain the close button
+          }}
+        >
+          {/* Cancel Icon */}
+          <IconButton
+            sx={{ position: 'absolute', top: 8, right: 8 }}
+            onClick={handleReceiptClose}
+          >
+            <CloseIcon />
+          </IconButton>
+
+          <Typography id="receipt-modal-title" variant="h6" gutterBottom>
+            Payment Receipt
+          </Typography>
+          <Box ref={receiptRef}>
+            <Typography variant="body1" gutterBottom>
+              Amount: {formValues.amount}
+            </Typography>
+            <Typography variant="body1" gutterBottom>
+              PID: {formValues.pid}
+            </Typography>
+            <Typography variant="body1" gutterBottom>
+              Description: {formValues.description || 'No description provided'}
+            </Typography>
+          </Box>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
+            <Button variant="outlined" color="primary" onClick={handlePrintReceipt}>
+              Print
+            </Button>
+            <Button variant="contained" color="primary" onClick={handleDownloadReceipt}>
+              Download PDF
+            </Button>
+          </Box>
         </Box>
       </Modal>
 
@@ -195,24 +299,24 @@ const Landing = () => {
             </Button>
 
             {/* Signup text and link */}
-            <Box sx={{ mt: 2, textAlign: 'center' }}>
+            {/* <Box sx={{ mt: 2, textAlign: 'center' }}>
               <Typography variant="body2" sx={{ color: '#fff', mb: 2, fontWeight: 'bold' }}>
                 Already have an account?
               </Typography>
               <Link to="/login" style={{ textDecoration: 'none', fontWeight: 'bold', padding: '4px 8px', border: '2px solid #1976d2', borderRadius: '4px', color: '#ffffff', display: 'inline-block' }}>
                 Login
               </Link>
-            </Box>
+            </Box> */}
 
             {/* Forgot password text and link */}
-            <Box sx={{ mt: 4, textAlign: 'center' }}>
+            {/* <Box sx={{ mt: 4, textAlign: 'center' }}>
               <Typography variant="body2" sx={{ color: '#fff', mb: 2, fontWeight: 'bold' }}>
                 Don,t have an account yet?
               </Typography>
               <Link to="/signup" style={{ textDecoration: 'none', fontWeight: 'bold', padding: '4px 8px', border: '2px solid #1976d2', borderRadius: '4px', color: '#ffffff', display: 'inline-block' }}>
                 Create new account
               </Link>
-            </Box>
+            </Box> */}
           </motion.div>
         </Container>
 
@@ -281,7 +385,7 @@ const Landing = () => {
           <DialogTitle sx={{ fontWeight: 'bold', textAlign: 'center' }}>Confirm Deposit</DialogTitle>
           <DialogContent>
             <DialogContentText sx={{ mb: 2 }}>
-              Are you sure you want to deposit the following details?
+            Are you sure you want to make this deposit of {formValues.amount}?
             </DialogContentText>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
               <Typography variant="body1" sx={{ fontWeight: 'bold' }}>Amount:</Typography>
