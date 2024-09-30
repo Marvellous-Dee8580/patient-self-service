@@ -199,7 +199,7 @@ const Landing = () => {
               <Typography variant="body2" sx={{ color: '#fff', mb: 2, fontWeight: 'bold' }}>
                 Already have an account?
               </Typography>
-              <Link to="/signup" style={{ textDecoration: 'none', fontWeight: 'bold', padding: '4px 8px', border: '2px solid #1976d2', borderRadius: '4px', color: '#ffffff', display: 'inline-block' }}>
+              <Link to="/login" style={{ textDecoration: 'none', fontWeight: 'bold', padding: '4px 8px', border: '2px solid #1976d2', borderRadius: '4px', color: '#ffffff', display: 'inline-block' }}>
                 Login
               </Link>
             </Box>
