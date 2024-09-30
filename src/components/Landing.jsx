@@ -207,10 +207,10 @@ const Landing = () => {
             {/* Forgot password text and link */}
             <Box sx={{ mt: 4, textAlign: 'center' }}>
               <Typography variant="body2" sx={{ color: '#fff', mb: 2, fontWeight: 'bold' }}>
-                Forgot your password?
+                Don,t have an account yet?
               </Typography>
-              <Link to="/forgot-password" style={{ textDecoration: 'none', fontWeight: 'bold', padding: '4px 8px', border: '2px solid #1976d2', borderRadius: '4px', color: '#ffffff', display: 'inline-block' }}>
-                Reset it here
+              <Link to="/signup" style={{ textDecoration: 'none', fontWeight: 'bold', padding: '4px 8px', border: '2px solid #1976d2', borderRadius: '4px', color: '#ffffff', display: 'inline-block' }}>
+                Create new account
               </Link>
             </Box>
           </motion.div>
