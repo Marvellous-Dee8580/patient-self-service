@@ -160,18 +160,25 @@ const Landing = () => {
 
         {/* Hero Section */}
         <Container maxWidth="lg" sx={{ textAlign: 'center', pt: 10, pb: 5, position: 'relative', zIndex: 1 }}>
-          <motion.div
+        <motion.div
             initial={{ opacity: 0, y: -50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <Typography variant="h2" component="h1" sx={{ mb: 2, fontWeight: 'bold', textShadow: '2px 2px 4px rgba(0, 0, 0, 0.7)' }}>
+            <Typography
+              variant="h2"
+              component="h1"
+              sx={{ mb: 2, fontWeight: 'bold', textShadow: '2px 2px 4px rgba(0, 0, 0, 0.7)' }}
+            >
               Welcome to Our Self-Service Kiosk
             </Typography>
-            <Typography variant="h5" sx={{ mb: 4, textShadow: '1px 1px 3px rgba(0, 0, 0, 0.5)' }}>
+            <Typography
+              variant="h5"
+              sx={{ mb: 4, textShadow: '1px 1px 3px rgba(0, 0, 0, 0.5)' }}
+            >
               Manage your wallet and payments effortlessly with our intuitive system.
             </Typography>
-            
+
             {/* Button to open the deposit modal */}
             <Button
               variant="contained"
@@ -186,6 +193,26 @@ const Landing = () => {
             >
               {buttonText}
             </Button>
+
+            {/* Signup text and link */}
+            <Box sx={{ mt: 2, textAlign: 'center' }}>
+              <Typography variant="body2" sx={{ color: '#fff', mb: 2, fontWeight: 'bold' }}>
+                Already have an account?
+              </Typography>
+              <Link to="/signup" style={{ textDecoration: 'none', fontWeight: 'bold', padding: '4px 8px', border: '2px solid #1976d2', borderRadius: '4px', color: '#ffffff', display: 'inline-block' }}>
+                Login
+              </Link>
+            </Box>
+
+            {/* Forgot password text and link */}
+            <Box sx={{ mt: 4, textAlign: 'center' }}>
+              <Typography variant="body2" sx={{ color: '#fff', mb: 2, fontWeight: 'bold' }}>
+                Forgot your password?
+              </Typography>
+              <Link to="/forgot-password" style={{ textDecoration: 'none', fontWeight: 'bold', padding: '4px 8px', border: '2px solid #1976d2', borderRadius: '4px', color: '#ffffff', display: 'inline-block' }}>
+                Reset it here
+              </Link>
+            </Box>
           </motion.div>
         </Container>
 
