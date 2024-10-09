@@ -5,39 +5,49 @@ import { Link } from 'react-router-dom'; // Import Link for navigation
 // import backgroundImage from '../assets/pngtree-couple-buying-cinema-tickets-flat-color-vector-faceless-characters-png-image_5065306.png';
 import backgroundImage from '../assets/HEALTHCARE_ENVIRONMENT-RENDER_01-crop.jpeg';
 
-// Sample feature data with links
-const features = [
-  {
-    title: 'Check Wallet Balance',
-    description: 'View your current wallet balance at a glance. All in one click.',
-    link: '/wallet-balance', // Link to the wallet balance module
-  },
-  {
-    title: 'Top-up Wallet',
-    description: 'Easily add funds to your wallet for seamless transactions.',
-    link: '/top-up-wallet', // Link to the top-up wallet module
-  },
-  {
-    title: 'Transaction History',
-    description: 'Keep track of your transactions with detailed records.',
-    link: '/transaction-history', // Link to the transaction history module
-  },
-  {
-    title: 'View Outstanding Bills',
-    description: 'Stay updated with your outstanding bills and payments.',
-    link: '/outstanding-bills', // Link to the outstanding bills module
-  },
-  {
-    title: 'Wallet-to-Wallet Transfers',
-    description: 'Transfer funds securely between wallets with ease.',
-    link: '/wallet-transfer', // Link to the wallet-to-wallet transfers module
-  },
-  {
-    title: 'Bill History',
-    description: 'Keep track of your billings with detailed records seamlessly.',
-    link: '/bill-history', // Link to the bill history module
-  },
-];
+  // Sample feature data with links
+  const features = [
+    {
+      title: 'Check Wallet Balance',
+      description: 'View your current wallet balance at a glance. All in one click.',
+      link: '/wallet-balance', // Link to the wallet balance module
+    },
+    {
+      title: 'Top-up Wallet',
+      description: 'Easily add funds to your wallet for seamless transactions.',
+      link: '/top-up-wallet', // Link to the top-up wallet module
+    },
+    {
+      title: 'Transaction History',
+      description: 'Keep track of your transactions with detailed records.',
+      link: '/transaction-history', // Link to the transaction history module
+    },
+    {
+      title: 'View Outstanding Bills',
+      description: 'Stay updated with your outstanding bills and payments.',
+      link: '/outstanding-bills', // Link to the outstanding bills module
+    },
+    {
+      title: 'Wallet-to-Wallet Transfers',
+      description: 'Transfer funds securely between wallets with ease.',
+      link: '/wallet-transfer', // Link to the wallet-to-wallet transfers module
+    },
+    {
+      title: 'Bill History',
+      description: 'Keep track of your billings with detailed records seamlessly.',
+      link: '/bill-history', // Link to the bill history module
+    },
+    {
+      title: 'Book Appointment',
+      description: 'Schedule an appointment with a professional easily.',
+      link: '/book-appointment', // Link to the book appointment module
+    },
+    {
+      title: 'Check Health Record',
+      description: 'Access and review your health records quickly and securely.',
+      link: '/check-health-record', // Link to the check health record module
+    },
+  ];
 
 const Dashboard = () => {
   return (
@@ -95,7 +105,7 @@ const Dashboard = () => {
           transition={{ duration: 0.5 }}
         >
           <Typography variant="h2" component="h1" sx={{ mb: 2, fontWeight: 'bold', textShadow: '2px 2px 4px rgba(0, 0, 0, 0.7)' }}>
-            Welcome to Our Self-Service Kiosk
+            Welcome To Our Self-Service Kiosk
           </Typography>
           <Typography variant="h5" sx={{ mb: 4, textShadow: '1px 1px 3px rgba(0, 0, 0, 0.5)' }}>
             Manage your wallet and payments effortlessly with our intuitive system.
