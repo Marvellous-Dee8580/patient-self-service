@@ -274,7 +274,7 @@ const Landing = () => {
               component="h1"
               sx={{ mb: 2, fontWeight: 'bold', textShadow: '2px 2px 4px rgba(0, 0, 0, 0.7)' }}
             >
-              Welcome To Our Self-Service Kiosk
+              Welcome To Patient Health Self-Service
             </Typography>
             <Typography
               variant="h5"

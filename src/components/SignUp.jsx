@@ -29,6 +29,8 @@ const SignUp = () => {
     gender: "",
     maritalStatus: "",
     stateOfOrigin: "",
+    pid: "", // PID field
+    phoneNumber: "", // Phone Number field
   });
 
   const [errors, setErrors] = useState({});
@@ -44,6 +46,7 @@ const SignUp = () => {
 
     if (!formData.fullName) newErrors.fullName = "Full Name is required.";
     if (!formData.email) newErrors.email = "Email is required.";
+    if (!formData.phoneNumber) newErrors.phoneNumber = "Phone Number is required."; // Validation for Phone Number
     if (!validatePassword(formData.password))
       newErrors.password = "Password must include an uppercase letter, a lowercase letter, a number, a symbol, and no spaces.";
     if (formData.password !== formData.confirmPassword)
@@ -79,6 +82,16 @@ const SignUp = () => {
 
       <form onSubmit={handleSubmit}>
         <TextField
+          label="PID (optional)"
+          name="pid"
+          fullWidth
+          margin="normal"
+          value={formData.pid}
+          onChange={handleChange}
+          placeholder="I already have a PID"
+          sx={{ mb: 2 }}
+        />
+        <TextField
           label="Full Name"
           name="fullName"
           fullWidth
@@ -99,6 +112,18 @@ const SignUp = () => {
           onChange={handleChange}
           error={!!errors.email}
           helperText={errors.email}
+          sx={{ mb: 2 }}
+        />
+        <TextField
+          label="Phone Number"
+          name="phoneNumber"
+          fullWidth
+          margin="normal"
+          type="tel"
+          value={formData.phoneNumber}
+          onChange={handleChange}
+          error={!!errors.phoneNumber}
+          helperText={errors.phoneNumber}
           sx={{ mb: 2 }}
         />
         <TextField

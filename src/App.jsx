@@ -14,6 +14,8 @@ import BillHistory from './components/BillHistory';
 import ForgotPassword from "./components/ForgotPassword";
 import LogoutButton from './components/LogoutButton';
 import BookAppointment from './components/BookAppointment';
+import CheckResultsStatus from './components/CheckResultsStatus';
+import Register from './components/Register';
 
 function App() {
   return (
@@ -33,7 +35,9 @@ function App() {
           <Route path="/wallet-transfer" element={<WalletTransfer />} />
           <Route path="/bill-history" element={<BillHistory />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/check-health-record" element={<CheckResultsStatus />} />
           <Route path="/book-appointment" element={<BookAppointment />} />
+          <Route path="/register" element={<Register />} />
         </Routes>
       </Box>
     </Router>
@@ -52,8 +56,5 @@ const ConditionalLogoutButton = () => {
 
   return !hideLogoutButton.includes(location.pathname) ? <LogoutButton /> : null;
 };
-
-      // "@mui/x-date-pickers": "^7.19.0",
-          // "date-fns": "^4.1.0",
 
 export default App;

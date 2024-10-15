@@ -48,13 +48,24 @@ const Login = () => {
           <Typography variant="h4" sx={{ mb: 3, color: '#1976d2', fontWeight: '600' }}>
             Login
           </Typography>
-          
+
           <TextField 
-            label="Email" 
+            label="PID" 
             variant="outlined" 
             fullWidth 
             sx={{ mb: 2 }} 
             InputProps={{
+              style: { borderColor: '#1976d2' }, // Add border color
+            }} 
+          />
+
+          <TextField 
+            label="Patient fullname"
+            variant="outlined" 
+            fullWidth 
+            sx={{ mb: 2 }} 
+            InputProps={{
+              readOnly: true, // Make the input read-only
               style: { borderColor: '#1976d2' }, // Add border color
             }} 
           />
